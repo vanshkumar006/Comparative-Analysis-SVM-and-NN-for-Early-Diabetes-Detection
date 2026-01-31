@@ -1,40 +1,50 @@
-Clinical Diabetes Diagnosis: SVM vs. MLP Neural Network
-This repository features a comparative analysis between Linear Support Vector Machines (SVM) and Multi-Layer Perceptron (MLP) neural networks to diagnose diabetes based on clinical data.
+Diabetes Diagnosis System: A Comparative Machine Learning Approach
+This project implements a clinical decision-support pipeline to detect diabetes using patient medical data. It compares the performance of a Linear Support Vector Machine (SVM) and a Multi-Layer Perceptron (MLP) Neural Network, focusing on hyperparameter tuning and medical evaluation metrics like Recall.
 
-📊 Performance Summary
-In recent testing with a real-world dataset, the MLP Classifier slightly outperformed the Linear SVM, demonstrating higher sensitivity (Recall) for diabetic cases.
-Model	Accuracy	Recall (Class 1)	Key Hyperparameters
-Linear SVM	60.94%	58%	C: 0.01
-MLP Classifier	61.88%	67%	hidden_layer_sizes: (50,), solver: sgd
-Note on Medical Sensitivity: In clinical diagnosis, Recall is critical. The MLP's 67% recall indicates it is significantly better at catching true diabetic cases compared to the SVM's 58%, reducing the risk of missing a diagnosis.
+📌 Project Overview
+The system processes clinical features (such as BMI, Glucose levels, and HbA1c) to classify patients as diabetic or non-diabetic. Unlike standard classification tasks, this project uses medical thresholds to dynamically label the dataset and employs GridSearchCV to optimize models for high-stakes medical diagnostics.
 
-📂 Dataset Information
-Total Records: 1,065 clinical samples.
-Features: 9 columns including Gender, Age, BMI, OGTT (Glucose), and HbA1c.
-Class Balance: Nearly 50/50 split (537 Non-Diabetic / 528 Diabetic), providing a robust foundation for training.
+🧪 Clinical Features
+The model utilizes the following patient features:
+GENDER: Categorical (Encoded)
+AGE: Patient age
+BMI: Body Mass Index
+OGTT1FBS: Oral Glucose Tolerance Test (Fast Blood Sugar)
+HBA1C1: Hemoglobin A1c levels (Average blood sugar over 3 months)
 
-🧪 Model Details
-1. Linear SVM
-The SVM utilized a small regularization parameter (C=0.01), suggesting a high degree of overlap in the feature space, requiring a "softer" margin to prevent overfitting.
-2. MLP (Neural Network)
-The Multi-Layer Perceptron achieved its best performance using:
-Architecture: One hidden layer with 50 neurons.
-Activation: ReLU.
-Optimizer: SGD (Stochastic Gradient Descent).
-Optimization Note: The model required extensive training (2000+ iterations), indicating complex, non-linear relationships within the clinical features.
+⚙️ Methodology
 
-📈 Visualizations
-The system automatically generates confusion matrices to visualize the trade-off between False Positives and False Negatives.
-Confusion Matrix Comparison
-Linear SVM	MLP Classifier
-	
-🛠️ Requirements & Setup
-Dependencies: numpy, pandas, matplotlib, seaborn, scikit-learn, openpyxl.
-Data: Ensure data_file.xlsx is in the root folder.
-Execution:
-code
-Bash
-python main.py
+1. Data Preprocessing & Medical Labeling
+Data is cleaned of duplicates and labeled based on standard clinical diagnostic criteria:
+Diabetic (1): If OGTT >= 126 mg/dL OR HbA1c >= 6.5%.
+Non-Diabetic (0): Otherwise.
+The features are then scaled using StandardScaler to ensure the Neural Network and SVM converge efficiently.
 
-🔍 Observations
-The results highlight that while linear models (SVM) provide a fast baseline, neural networks (MLP) are better suited for medical datasets where the boundary between "healthy" and "at-risk" is often non-linear and high-dimensional.
+2. Model Architectures
+Linear SVM: A robust boundary-based classifier. Optimized using different C (regularization) values.
+MLP Classifier (Neural Network): A deep learning approach exploring different hidden layer architectures, activation functions (ReLU, Tanh), and solvers (Adam, SGD).
+
+4. Hyperparameter Tuning
+We use GridSearchCV with a focus on Recall. In a medical context, Recall is prioritized because missing a diabetic patient (False Negative) is more critical than a false alarm (False Positive).
+
+📊 Results & Performance
+Based on the latest run, the models achieved the following performance on a test set of 320 samples:
+Metric	Linear SVM	MLP Classifier
+Accuracy	60.94%	61.88%
+Recall (Class 1)	0.58	0.67
+Precision (Class 1)	0.61	0.61
+Best Parameters	C: 0.01	hidden_layers: (50,), solver: sgd
+
+Confusion Matrices
+The project generates visual heatmaps to compare the error types between the two models:
+Linear SVM: Shows a balanced approach but slightly higher False Negatives.
+MLP Classifier: Achieved the highest accuracy and significantly better Recall for diabetic patients (detecting 106 out of 159 cases).
+
+📈 Key Insights
+Neural Networks vs. SVM: The MLP Classifier outperformed the Linear SVM in both overall accuracy and its ability to correctly identify diabetic patients (Recall).
+Convergence: The MLP model encountered convergence warnings, suggesting that with a larger dataset or further feature engineering, the accuracy could be improved beyond the current ~62%.
+
+📜 Future Improvements
+Implement Random Forest or XGBoost for comparison.
+Feature engineering to combine Age and BMI into risk-factor categories.
+Addressing class imbalance if present in larger datasets using SMOTE.

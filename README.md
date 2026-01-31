@@ -1,0 +1,2 @@
+# Comparative-Analysis-SVM-and-NN-for-Early-Diabetes-Detection
+ Clinical Diabetes Diagnosis System using SVM &amp; MLP. Analyzed 1,065 records. MLP (62% accuracy, 67% recall) outperformed SVM (61% accuracy). Optimized for Recall to minimize false negatives in medical screening. Includes automated clinical labeling, GridSearchCV tuning, and visual analytics for comparative performance. Healthcare ML benchmark.
